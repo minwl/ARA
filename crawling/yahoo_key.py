@@ -7,7 +7,6 @@ import json
 
 
 def get_url(keyword):
-    # rss = 'https://finance.yahoo.com/news/rss'   #yahoo latest news
     rss = 'https://news.google.com/rss/search?q=yahoo+finance+{}+when:1d&tbm=nws&tbs=qdr:d'.format(keyword) #yahoo news with keyword
     # rss = 'https://news.google.com/rss/search?q={}+when:1d&hl=en-NG&gl=NG&ceid=NG:en'.format(keyword) #google news with keyword
     news = feedparser.parse(rss).entries
