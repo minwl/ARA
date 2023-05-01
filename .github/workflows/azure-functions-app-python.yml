@@ -22,6 +22,7 @@ on:
   push:
     branches: ["main"]
 
+
 env:
   AZURE_FUNCTIONAPP_NAME: 'app.py'   # set this to your function app name on Azure
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './flask'       # set this to the path to your function app project, defaults to the repository root
@@ -32,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
+    - name: Azure Login
+      uses: Azure/login@v1
+    
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v3
 
