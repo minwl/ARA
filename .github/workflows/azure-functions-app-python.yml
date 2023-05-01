@@ -33,8 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
-    - name: Azure Login
-      uses: Azure/login@v1
     
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v3
