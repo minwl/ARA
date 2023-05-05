@@ -4,63 +4,174 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ARA Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">   -->
+    <style>
+      .bd-main {
+        margin-top: 5px; margin-left: 10px;
+      }
+      .bd-intro {
+        background-color:lightblue; font-family: sans-serif; font-weight : bold;color: white; padding: spacer !important;
+      }
+      .bd-input {
+        background-color: aliceblue; padding : 10px;
+      }
+      .smtbtn {
+        width: 100%; 
+      }
+      .queryinput{
+        border-radius: 2; background-color: aliceblue; width: 100%;
+      }
+    </style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <!-- <script src="/static/test19.js"></script> -->
+    <script>
+    // function validateForm() {
+    //   const inputForm = document.getElementById("queryinput");
+    //   const submitButton = document.getElementById("submit_btn");
+    //   if (inputForm.value.trim() === "") {
+    //     return true;
+    //   } else {
+    //     console.log(inputForm.value.trim());
+    //     return false;
+    //   }
+    // }
+
+    // function addNewInput() {
+    //   const container = document.getElementById("container");
+    //   const currentInput = container.lastElementChild.previousElementSibling;
+    //   const prevsubmit = currentInput.querySelector("#submit_btn");
+    //   const previnput = currentInput.querySelector("#queryinput");
+    //   prevsubmit.disabled = true;
+    //   prevsubmit.disabled = true;
+
+    //   const newInput = currentInput.cloneNode(true);
+    //   const submitButton = newInput.querySelector("#submit_btn");
+    //   const inputForm = newInput.querySelector("#queryinput");
+
+    //   submitButton.disabled = false;
+    //   inputForm.disabled = false;
+
+    //   const inputHTML = newInput.outerHTML;
+    //   const newComp = document.createElement("div");
+    //   newComp.innerHTML = inputHTML;
+
+    //   container.appendChild(newComp);
+    // }
+
+    function addAnswer(){
+      console.log('submit button clicked')
+      const container = document.getElementById("container");
+      const currentInput = container.lastElementChild;
+      const prevsubmit = currentInput.querySelector("#submit_btn");
+      const previnput = currentInput.querySelector("#queryinput");
+      const prevquery = previnput.value.trim();
+      
+      console.log(prevquery)
+      if (prevquery === "") {
+        alert('Please enter a question.')
+        return false
+      }
+      previnput.disabled = true;
+      prevsubmit.disabled = true;
+
+      const answerText = 'This is the result <br> ... <br> ... <br> ... <br>';  //get from model output
+      const answerHTML = `<div class="bd-intro p-3">${answerText}</div>`;
+      const answer = document.createElement("div");
+      answer.innerHTML = answerHTML;
+      container.appendChild(answer);
+
+      const newInput = currentInput.cloneNode(true);
+      const submitButton = newInput.querySelector("#submit_btn");
+      const inputForm = newInput.querySelector("#queryinput");
+
+      submitButton.disabled = false;
+      inputForm.disabled = false;
+
+      const inputHTML = newInput.outerHTML;
+      const newComp = document.createElement("div");
+      newComp.innerHTML = inputHTML;
+
+      container.appendChild(newComp);
+    }
+
+function init() {
+  console.log('page is ready');
+  // const container = document.getElementById("container");
+  // const currentInput = container.lastElementChild;
+  // const submitButton = currentInput.querySelector("#submit_btn");
+  // const inputForm = currentInput.querySelector("#queryinput");
+
+  // submitButton.addEventListener("click", function(event) {
+  //   console.log('submit button clicked')
+  //   if (!validateForm()) {
+  //     event.preventDefault(); // Prevent form submission if validation fails
+  //     addAnswer();
+  //     addNewInput();
+      
+  //   }
+  // });
+}
+    window.addEventListener("load", init);
+    </script>
+
     </head>
+
   <body>
 
-     
   <header class="navbar navbar-expand-lg sticky-top p-3" style="background-color: #e3f2fd;">
-  <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap">
-    <a class="navbar-brand" href="{{url_for('index')}}"> ARA </a>
+    <div class="container-fluid">
+    <a class="navbar-brand"> ARA </a>
+
     <span class="navbar-text">
-        Assistant for Research Analysts
-      </span>
+      Assistant for Research Analysts
+    </span>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <!-- <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="{{url_for('index')}}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
+          <a class="nav-link" href="#">How to use</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Pricing</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
       </ul>
-    </div> -->
-  </nav>
+    </div>
+    </div>
   </header>
  
 <body>
-    <main class = 'bd-main p-3' style = 'margin-top: 5px; margin-left: 10px;'>
-        <div class="container-lg">
-        <div class = 'bd-first p-3' style = 'background-color:lightblue; font-family: sans-serif; font-weight : bold;color: white;'> 
+    <main id = 'main' class = 'bd-main p-3'>
+        <div id="container" class="container-lg flex-wrap flex-lg-nowrap">
+        <div  id = 'bd-intro' class = 'bd-intro p-3'> 
             Hello, this is ARA. <br>
             Please submit your question below.
         </div>
-        <div class="bd-qustion" style = 'background-color: aliceblue; padding : 10px' >            
-            <form class="row g-4 justify-content-between" method = 'post' action = "{{url_for('result')}}">
-                <div class="col-11">
-                    <input type="query" class="form-control" id="queryinput" name = 'query' placeholder="type here" style = 'border-radius: 2; background-color: aliceblue;'>
+        <div id = 'bd-input' class = 'bd-input' >            
+            <div class="row g-1">
+                <div class="col-md-11">
+                    <input id="queryinput" class="form-control queryinput has-validation" placeholder="type here">
                 </div>
-                <div class="col-1">
-                    <button class="btn btn-outline-success" type="submit">submit</button>
+                <div class="col-md-1">
+                    <button id="submit_btn" class="btn btn-outline-success smtbtn" onclick = addAnswer() >submit</button>
                 </div>
-            </form>
-            <div id="queryinput" class="form-text">
+              </div>
+            <div id="queryinput_eg" class="form-text">
                 e.g. give me a summary report of Tesla in last 24hrs
             </div>
         </div>
-        <!-- <div class = 'bd-answer p-3' style = 'background-color:lightblue; font-family: sans-serif; font-weight : bold;color: white;'> 
-            Here is the report <br>
-        </div> -->
+
 
         
 </body>
