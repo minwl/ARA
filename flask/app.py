@@ -3,9 +3,28 @@ from flask import Flask, redirect, render_template, request, send_from_directory
 app = Flask(__name__)
 
 @app.route('/')
+def welcome():
+   print('Request for welcome page received')
+   return render_template('welcome.html')
+
+@app.route('/howto')
+def howto():
+   print('Request for how to page received')
+   return render_template('howto.html')
+
+@app.route('/index')
 def index():
    print('Request for index page received')
    return render_template('index.html')
+
+@app.route('/price')
+def index():
+   print('Request for price page received')
+   return render_template('price.html')
+
+# @app.route('colaburl')
+
+
 
 # @app.route('/api')
 # def myapi():
