@@ -51,7 +51,7 @@ function addFeedback(answer){
     </div>
     <div class = 'contbtn'>  
       <input id = 'cont' class = 'btn btn-sm btn-outline-success' type ='submit' value = 'Continue' style="margin :1px" onclick="cont()">
-      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px" >
+      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px onclick='done()'" >
     </div> 
 
 `;
@@ -120,10 +120,9 @@ function done(){
   const currAns = container.lastElementChild
   const prevdone = currAns.querySelector("#done");
   const prevcont = currAns.querySelector("#cont");
-  const stars = currAns.querySelector("#rates");
   const rate = getRate();
   if (rate <0){
-    alert('please rate the answer before continue')
+    alert('please rate the answer before close')
     return false;
   }
   else{
