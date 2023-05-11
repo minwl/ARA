@@ -51,7 +51,7 @@ function addFeedback(answer){
     </div>
     <div class = 'contbtn'>  
       <input id = 'cont' class = 'btn btn-sm btn-outline-success' type ='submit' value = 'Continue' style="margin :1px" onclick="cont()">
-      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px onclick='done()'" >
+      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px onclick="done()" >
     </div> 
 
 `;
