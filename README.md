@@ -18,4 +18,6 @@ git push -u origin main
 
 ## flask
 - templates for webpage(html)
-- run app.py to see website
+- javascript and css in static folder
+- app.py is deployed in [testserverfords.](https://testserverfords.azurewebsites.net/)
+  . synced with this repo (update the web app automatically when committed has happened)
