@@ -20,4 +20,4 @@ git push -u origin main
 - templates for webpage(html)
 - javascript and css in static folder
 - app.py is deployed in [testserverfords.](https://testserverfords.azurewebsites.net/)
-  . synced with this repo (update the web app automatically when committed has happened)
+  - synced with this repo (update the web app automatically when committed has happened)
