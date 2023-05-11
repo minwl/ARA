@@ -24,7 +24,6 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-    <!-- <script src="../static/welcome.js"></script> -->
   </head>
 
   <body>
@@ -47,7 +46,7 @@
                       <a class = 'btn btn-outline-dark' href = "url_for{{'index'}}"> Go</a>
                     </div>
                 </div> -->
-                <a class = 'btn btn-outline-dark' href = "url_for{{'index'}}"> Get Started </a>
+                <a class = 'btn btn-outline-dark' href="{{url_for('index')}}"> Get Started </a>
             </div>
             <div class = 'col-md-4'>
                 <!-- <div class="card">
@@ -60,7 +59,7 @@
                       <a class = 'btn btn-outline-dark' href = "url_for{{'howto'}}"> Go</a>
                     </div>
                 </div> -->
-                <a class = 'btn btn-outline-dark' href = "url_for{{'howto'}}"> How to use</a>
+                <a class = 'btn btn-outline-dark' href = "{{url_for('howto')}}"> How to use</a>
 
             </div>
             <div class = 'col-md-4'>
@@ -74,7 +73,7 @@
                       <a class = 'btn btn-outline-dark' href = "url_for{{'price'}}">Go</a>
                     </div>
                 </div> -->
-                <a class = 'btn btn-outline-dark' href = "url_for{{'price'}}">Price</a>
+                <a class = 'btn btn-outline-dark' href ="{{url_for('price')}}">Price</a>
             </div>
 
 

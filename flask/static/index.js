@@ -14,39 +14,46 @@ function clicked(){
   previnput.disabled = true;
   prevsubmit.disabled = true;
 
-  addAnswer();
+  getAnswer(prevquery);
+}
+
+function getAnswer(query){
+  const url = '/api?query='+query;
+  $.getJSON(url, data => {
+    console.log(data.result[1]);
+    addAnswer(data.result[1]);
+  })
 }
 
 
-function addAnswer(){
+function addAnswer(answer){
+  console.log("input : ", answer)
+  const answerText = `This is the result <br> ${answer} <br>`;  //get from model output
+  const answerElem = document.createElement("div");
+  answerElem.classList.add('bd-answer', 'p-3')
+  answerElem.innerHTML = answerText;
+  addFeedback(answerElem);
 
-  const answerText = `This is the result <br> ... <br> ... <br> ... <br>`;  //get from model output
-  const answer = document.createElement("div");
-  answer.classList.add('bd-intro', 'p-3')
-  answer.innerHTML = answerText;
-  addFeedback(answer);
-
-  container.appendChild(answer);
+  container.appendChild(answerElem);
 
 }
 
 function addFeedback(answer){
   const feedbackHTML = `
   <div class="col align-self-center">
-  <div id = "rates">
-  <div  class="rating">
-    <input type="radio" name="rating" value="5" id="5" onclick="getRate()"><label for="5">☆</label>
-    <input type="radio" name="rating" value="4" id="4" onclick="getRate()"><label for="4">☆</label>
-    <input type="radio" name="rating" value="3" id="3" onclick="getRate()"><label for="3">☆</label>
-    <input type="radio" name="rating" value="2" id="2" onclick="getRate()"><label for="2">☆</label>
-    <input type="radio" name="rating" value="1" id="1" onclick="getRate()"><label for="1">☆</label>
+  
+    <div id = "rates" class="rating">
+      <input type="radio" name="rating" value="5" id="5" onclick="getRate()"><label for="5">☆</label>
+      <input type="radio" name="rating" value="4" id="4" onclick="getRate()"><label for="4">☆</label>
+      <input type="radio" name="rating" value="3" id="3" onclick="getRate()"><label for="3">☆</label>
+      <input type="radio" name="rating" value="2" id="2" onclick="getRate()"><label for="2">☆</label>
+      <input type="radio" name="rating" value="1" id="1" onclick="getRate()"><label for="1">☆</label>
     </div>
-  </div>
     <div class = 'contbtn'>  
-      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px" >
       <input id = 'cont' class = 'btn btn-sm btn-outline-success' type ='submit' value = 'Continue' style="margin :1px" onclick="cont()">
+      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px" >
     </div> 
-</div> 
+
 `;
 
 const star = document.createElement("div");
@@ -75,27 +82,54 @@ function addNewInput(currentInput){
 
 function getRate()
 {	const rates = document.getElementsByName('rating')
+  const url2 = '/api2?rate=';
 	for (i = 0; i < rates.length; i++) {
 		if (rates[i].checked){
 			console.log(rates[i].value);
-      break;
+      fetch(url2+rates[i].value);
+      return rates[i].value;
 		}}
+  return -1;
 	}
 
 function cont(){
-  getRate();
   const container = document.getElementById("container");
   const currAns = container.lastElementChild
   const currentInput = container.lastElementChild.previousElementSibling;
   const prevdone = currAns.querySelector("#done");
   const prevcont = currAns.querySelector("#cont");
   const stars = currAns.querySelector("#rates");
+
+  const rate = getRate();
+  if (rate <0){
+    alert('please rate the answer before continue')
+    return false;
+  }
+  else{
+
   prevdone.disabled=true;
   prevcont.disabled=true;
   stars.innerHTML=''
 
   addNewInput(currentInput);
+  }
+}
 
+function done(){
+  const container = document.getElementById("container");
+  const currAns = container.lastElementChild
+  const prevdone = currAns.querySelector("#done");
+  const prevcont = currAns.querySelector("#cont");
+  const stars = currAns.querySelector("#rates");
+  const rate = getRate();
+  if (rate <0){
+    alert('please rate the answer before continue')
+    return false;
+  }
+  else{
+
+  prevdone.disabled=true;
+  prevcont.disabled=true;}
 
 }
 
@@ -106,58 +140,3 @@ console.log('page is ready');
 
 
 window.addEventListener("load", init);
-
-
-
-
-
-
-
-
-//old js
-// function validateForm() {
-//   const inputForm = document.getElementById("queryinput");
-//   const submitButton = document.getElementById("submit_btn");
-//   if (inputForm.value.trim() === "") {
-//     return true;
-//   } else {
-//     console.log(inputForm.value.trim());
-//     return false;
-//   }
-// }
-
-// function addNewInput() {
-//   const container = document.getElementById("container");
-//   const currentInput = container.lastElementChild.previousElementSibling;
-//   const prevsubmit = currentInput.querySelector("#submit_btn");
-//   const previnput = currentInput.querySelector("#queryinput");
-//   prevsubmit.disabled = true;
-//   prevsubmit.disabled = true;
-
-//   const newInput = currentInput.cloneNode(true);
-//   const submitButton = newInput.querySelector("#submit_btn");
-//   const inputForm = newInput.querySelector("#queryinput");
-
-//   submitButton.disabled = false;
-//   inputForm.disabled = false;
-
-//   const inputHTML = newInput.outerHTML;
-//   const newComp = document.createElement("div");
-//   newComp.innerHTML = inputHTML;
-
-//   container.appendChild(newComp);
-// }
-// const container = document.getElementById("container");
-// const currentInput = container.lastElementChild;
-// const submitButton = currentInput.querySelector("#submit_btn");
-// const inputForm = currentInput.querySelector("#queryinput");
-
-// submitButton.addEventListener("click", function(event) {
-//   console.log('submit button clicked')
-//   if (!validateForm()) {
-//     event.preventDefault(); // Prevent form submission if validation fails
-//     addAnswer();
-//     addNewInput();
-  
-//   }
-// });

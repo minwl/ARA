@@ -10,6 +10,12 @@ body{
     box-shadow: 5px 5px 5px grey;
     margin-top: 5px; 
   }
+  .bd-answer {
+    background-color:rgb(159, 230, 189); font-weight : bold;color: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px grey;
+    margin-top: 5px; 
+  }
   .bd-input {
     background-color: aliceblue; padding : 10px;
     border-radius: 10px;
@@ -61,7 +67,7 @@ body{
     opacity:1 ;
   }
   
-  .rating:hover > input:checked ~ label:before{ opacity: 0.4; }
+  /* .rating:hover > input:checked ~ label:before{ opacity: 0.4; } */
 
   .contbtn{
     display: flex;
