@@ -51,7 +51,7 @@ function addFeedback(answer){
     </div>
     <div class = 'contbtn'>  
       <input id = 'cont' class = 'btn btn-sm btn-outline-success' type ='submit' value = 'Continue' style="margin :1px" onclick="cont()">
-      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px onclick="done()" >
+      <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px" onclick="done()" >
     </div> 
 
 `;
@@ -132,9 +132,58 @@ function done(){
 
 }
 
+function login(){
+
+  const username = document.querySelector('#id').value;
+
+  if (username === ""){return false} //나중에는 user db info랑 연결해서 validation 해야함
+
+  else{
+  const greet = document.getElementById("greet")
+  const greetText = `<h1> Welcome, ${username} </h1>`;
+  greet.innerHTML = greetText;
+  const welcome = document.getElementById('welcomeContainer')
+  const loginform = document.getElementById("loginContainer")
+  loginform.classList.add('hidden')
+  welcome.classList.remove('hidden')
+  sessionStorage.setItem('username', username);
+  }
+
+}
+
+function register(){
+  const newid = document.getElementById('newid').value
+  const newpwd = document.getElementById('newpwd').value
+  const newFirstName = document.getElementById('newFirstName').value
+  const newLastName = document.getElementById('newLastName').value
+  const newEmailAdd = document.getElementById('newEmailAdd').value
+  const userinfo = {'id' : newid, 'pwd' : newpwd, 'first' : newFirstName, 'last' : newLastName, 'email' : newEmailAdd};
+  //db에 user info 저장
+
+  const register = document.getElementById('registerContainer')
+  const loginform = document.getElementById("loginContainer")
+  loginform.classList.add('hidden')
+  register.classList.remove('hidden')
+
+}
+
+
 function init() {
 console.log('page is ready');
+const savedUsername = sessionStorage.getItem("username");
+if (savedUsername === null){
 
+}
+else {
+  const greet = document.getElementById("greet")
+  const greetText = `<h1> Welcome, ${savedUsername} </h1>`;
+  greet.innerHTML = greetText;
+  const welcome = document.getElementById('welcomeContainer')
+  const loginform = document.getElementById("loginContainer")
+  loginform.classList.add('hidden')
+  welcome.classList.remove('hidden')
+  localStorage.setItem('username', username);
+}
 }
 
 

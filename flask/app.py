@@ -28,10 +28,11 @@ def myapi():
   query = request.args.get('query')
   if query:
    sector = query.split(';')[0]
-   question = query.split(';')[1]  
-   # response = requests.get('http://41b8-35-232-204-199.ngrok.io/QA', {'input_text': query})
-   # answer = response.text
-   return dict(success=1, result=[sector, question])
+   question = query.split(';')[1]
+   url = "https://907a-35-223-201-67.ngrok-free.app/QA"  
+   response = requests.get(url, {'input_text': question})
+   answer = response.text
+   return dict(success=1, result=[question, answer])
 
 @app.route('/api2')
 def myapi2():

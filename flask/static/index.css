@@ -73,3 +73,25 @@ body{
     display: flex;
     justify-content: right;
   }
+
+  .center-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
+.link{
+    color : black;            
+}
+.pad{
+    margin: 1vw;
+}
+input.underline {
+    border-left-width:0;
+    border-right-width:0;
+    border-top-width:0;
+    border-bottom-width:1;
+    background-color: beige;
+}
