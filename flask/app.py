@@ -1,7 +1,45 @@
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
-import requests
+import pymongo
+
+db_url = 'mongodb://acc0:yNof9Ynp06JlBUUHTAJ4tkXF5AotOndftrTnlZDSvoM4ugAMSdiY9myIWiz3yZbdzPfgNGtiNg6dACDbRyoj9A==@acc0.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@acc0@'
+DB_NAME = 'testDB'
+USER_COLLECTION = 'USER_INFO'
+FEEDBACK_COLLECTION = 'FEEDBACK'
 
 app = Flask(__name__)
+
+client = pymongo.MongoClient(db_url)
+db = client[DB_NAME]
+
+if DB_NAME not in client.list_database_names():
+    # Create a database with 400 RU throughput that can be shared across
+    # the DB's collections
+    db.command({"customAction": "CreateDatabase", "offerThroughput": 400})
+    print("Created db '{}' with shared throughput.\n".format(DB_NAME))
+else:
+    print("Using database: '{}'.\n".format(DB_NAME))
+
+user_db = db[USER_COLLECTION]
+feedback_db = db[FEEDBACK_COLLECTION]
+
+if USER_COLLECTION not in db.list_collection_names():
+    # Creates a unsharded collection that uses the DBs shared throughput
+    db.command(
+        {"customAction": "CreateCollection", "collection": USER_COLLECTION}
+    )
+    print("Created collection '{}'.\n".format(USER_COLLECTION))
+else:
+    print("Using collection: '{}'.\n".format(USER_COLLECTION))
+
+if FEEDBACK_COLLECTION not in db.list_collection_names():
+    # Creates a unsharded collection that uses the DBs shared throughput
+    db.command(
+        {"customAction": "CreateCollection", "collection": FEEDBACK_COLLECTION}
+    )
+    print("Created collection '{}'.\n".format(FEEDBACK_COLLECTION))
+else:
+    print("Using collection: '{}'.\n".format(FEEDBACK_COLLECTION))
+
 
 @app.route('/')
 def welcome():
@@ -23,25 +61,58 @@ def price():
    print('Request for price page received')
    return render_template('price.html')
 
-@app.route('/api')
-def myapi():
-  query = request.args.get('query')
+
+@app.route('/ask/<query>', methods=['GET']) #여기서 sector query answer -> db로 저장, key_id값 받아서 html에 숨겨놓기
+def ask(query):
   if query:
    sector = query.split(';')[0]
    question = query.split(';')[1]
-   url = "https://907a-35-223-201-67.ngrok-free.app/QA"  
-   response = requests.get(url, {'input_text': question})
-   answer = response.text
-   return dict(success=1, result=[question, answer])
 
-@app.route('/api2')
-def myapi2():
-  rate = request.args.get('rate')
-  if rate:
-   print(rate)
-   # response = requests.get('http://41b8-35-232-204-199.ngrok.io/QA', {'input_text': query})
-   # answer = response.text
-   return dict(success=1, result=rate)
+   #connect to model output
+#    url = "https://907a-35-223-201-67.ngrok-free.app/QA"  
+#    response = requests.get(url, {'input_text': question})
+#    answer = response.text
+
+    #sample answer for test
+   answer = 'this is sample answer'
+   feedback = {
+     'sector' : sector,
+     'query' : query,
+     'answer' : answer,
+     'rate' : None
+  }
+   p = feedback_db.insert_one(feedback)
+   key = str(p.inserted_id)
+   
+   return dict(success=1, result=[question, answer, key])
+
+#db에 key 찾아서 rate항목 update
+@app.route('/feedback/<key>/<rate>', methods=['GET'])
+def feedback(key, rate):
+  feedback_db.update_one({'_id': key}, {"$set": {'rate' : rate}})
+  return dict(success=1, result=rate)
+
+
+@app.route('/register/<newid>/<newpwd>/<newFirst>/<newLast>/<newEmail>', methods=['GET'])
+def insertOne(newid, newpwd, newFirst, newLast, newEmail):
+    queryObject = {
+        'ID': newid,
+        'PWD': newpwd,
+        'Name' : {'First' : newFirst, 'Last' : newLast},
+        'newEmail': newEmail
+    }
+    
+    query = user_db.insert_one(queryObject)
+    return None
+
+@app.route('/valid/<id>/<pwd>', methods=['GET'])
+def validate(id, pwd):
+    query = user_db.find_one({"ID" :id })
+    if query:
+        if query['PWD'] == pwd:
+            return dict(success=1, username = query['Name']['First'])
+    else: return dict(success=0, username = None)
+
 
 
 if __name__ == '__main__':

@@ -18,30 +18,30 @@ function clicked(){
 }
 
 function getAnswer(query){
-  const url = '/api?query='+query;
+  const url = '/ask/'+query;
   $.getJSON(url, data => {
     console.log(data.result[1]);
-    addAnswer(data.result[1]);
+    addAnswer(data.result[1], data.result[2]);
   })
 }
 
 
-function addAnswer(answer){
+function addAnswer(answer, key){
   console.log("input : ", answer)
   const answerText = `This is the result <br> ${answer} <br>`;  //get from model output
   const answerElem = document.createElement("div");
   answerElem.classList.add('bd-answer', 'p-3')
   answerElem.innerHTML = answerText;
-  addFeedback(answerElem);
+  addFeedback(answerElem, key);
 
   container.appendChild(answerElem);
 
 }
 
-function addFeedback(answer){
+function addFeedback(answer, key){
   const feedbackHTML = `
   <div class="col align-self-center">
-  
+    
     <div id = "rates" class="rating">
       <input type="radio" name="rating" value="5" id="5" onclick="getRate()"><label for="5">☆</label>
       <input type="radio" name="rating" value="4" id="4" onclick="getRate()"><label for="4">☆</label>
@@ -53,7 +53,8 @@ function addFeedback(answer){
       <input id = 'cont' class = 'btn btn-sm btn-outline-success' type ='submit' value = 'Continue' style="margin :1px" onclick="cont()">
       <input id ='done' class = 'btn btn-sm btn-outline-success' type ='submit' value="Done" style="margin :1px" onclick="done()" >
     </div> 
-
+  </div>
+    <div class = 'hidden' id = 'key'>${key}</div>
 `;
 
 const star = document.createElement("div");
@@ -81,16 +82,20 @@ function addNewInput(currentInput){
 }
 
 function getRate()
-{	const rates = document.getElementsByName('rating')
-  const url2 = '/api2?rate=';
-	for (i = 0; i < rates.length; i++) {
-		if (rates[i].checked){
-			console.log(rates[i].value);
-      fetch(url2+rates[i].value);
+{
+  const rates = document.getElementsByName('rating')
+  const key = document.getElementById('key').innerText
+  console.log('why?')
+  console.log(key);
+  const url_rate = `/feedback/${key}/`;
+    for (i = 0; i < rates.length; i++) {
+        if (rates[i].checked){
+            console.log(rates[i].value);
+      fetch(url_rate+rates[i].value);
       return rates[i].value;
-		}}
+        }}
   return -1;
-	}
+    }
 
 function cont(){
   const container = document.getElementById("container");
@@ -132,40 +137,6 @@ function done(){
 
 }
 
-function login(){
-
-  const username = document.querySelector('#id').value;
-
-  if (username === ""){return false} //나중에는 user db info랑 연결해서 validation 해야함
-
-  else{
-  const greet = document.getElementById("greet")
-  const greetText = `<h1> Welcome, ${username} </h1>`;
-  greet.innerHTML = greetText;
-  const welcome = document.getElementById('welcomeContainer')
-  const loginform = document.getElementById("loginContainer")
-  loginform.classList.add('hidden')
-  welcome.classList.remove('hidden')
-  sessionStorage.setItem('username', username);
-  }
-
-}
-
-function register(){
-  const newid = document.getElementById('newid').value
-  const newpwd = document.getElementById('newpwd').value
-  const newFirstName = document.getElementById('newFirstName').value
-  const newLastName = document.getElementById('newLastName').value
-  const newEmailAdd = document.getElementById('newEmailAdd').value
-  const userinfo = {'id' : newid, 'pwd' : newpwd, 'first' : newFirstName, 'last' : newLastName, 'email' : newEmailAdd};
-  //db에 user info 저장
-
-  const register = document.getElementById('registerContainer')
-  const loginform = document.getElementById("loginContainer")
-  loginform.classList.add('hidden')
-  register.classList.remove('hidden')
-
-}
 
 
 function init() {
