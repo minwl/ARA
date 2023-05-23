@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 from tqdm import tqdm
+from newspaper import Article
 
 
 def get_html (src, output): 
