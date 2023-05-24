@@ -20,7 +20,7 @@ name: Deploy Python project to Azure Function App
 
 on:
   push:
-    branches: ["main"]
+    paths: './flask'
 
 
 env:
