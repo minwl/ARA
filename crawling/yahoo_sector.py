@@ -7,6 +7,36 @@ import time
 import json
 from tqdm import tqdm
 from newspaper import Article
+import pymongo
+
+
+db_url = 'mongodb://acc0:yNof9Ynp06JlBUUHTAJ4tkXF5AotOndftrTnlZDSvoM4ugAMSdiY9myIWiz3yZbdzPfgNGtiNg6dACDbRyoj9A==@acc0.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@acc0@'
+DB_NAME = 'testDB'
+ARTICLE_COLLECTION = 'ARTICLE'
+FEEDBACK_COLLECTION = 'FEEDBACK'
+
+client = pymongo.MongoClient(db_url)
+db = client[DB_NAME]
+
+if DB_NAME not in client.list_database_names():
+    # Create a database with 400 RU throughput that can be shared across
+    # the DB's collections
+    db.command({"customAction": "CreateDatabase", "offerThroughput": 400})
+    print("Created db '{}' with shared throughput.\n".format(DB_NAME))
+else:
+    print("Using database: '{}'.\n".format(DB_NAME))
+
+article_db = db[ARTICLE_COLLECTION]
+
+if ARTICLE_COLLECTION not in db.list_collection_names():
+    # Creates a unsharded collection that uses the DBs shared throughput
+    db.command(
+        {"customAction": "CreateCollection", "collection": ARTICLE_COLLECTION}
+    )
+    print("Created collection '{}'.\n".format(ARTICLE_COLLECTION))
+else:
+    print("Using collection: '{}'.\n".format(ARTICLE_COLLECTION))
+
 
 
 def get_html (src, output): 
@@ -26,8 +56,8 @@ def get_html (src, output):
 
     with open(output, 'w') as f:
         f.write(driver.page_source)
-
     driver.close()
+
 
 def get_url(file, src):
     cont = open(file, 'r')
@@ -44,9 +74,18 @@ def get_url(file, src):
                 urlset.append(srcurl)
         else : break
     print('number of articles..', len(urlset))
+
     return urlset
 
-def get_news(urlset, final):
+
+def get_news_full(url):
+    article = Article(url, language='en')
+    article.download()
+    article.parse()
+    return article.text
+
+
+def get_news(urlset):
     if urlset == []:
         return 'url not exist'
     
@@ -74,7 +113,6 @@ def get_news(urlset, final):
         keyword = content['keywords']
         provider = content['provider']['name']
         datepublished = content['datePublished']
-        # body = get_news_full(html, newsid)
         body = get_news_full(url)
         news['title'] = title
         news['keyword'] = keyword
@@ -82,30 +120,19 @@ def get_news(urlset, final):
         news['datepublished'] = datepublished
         news['content'] = body
         total_news.append(news)
-        
 
+        article_db.insert_one(news)  
+
+    return total_news
+
+
+def save_json(total_news, final):    
+    for news in total_news:
+        news.pop("_id")
+    
     with open(final, 'w', encoding='utf-8') as f:
         json.dump(total_news, f, ensure_ascii=False, indent='\t')
 
-# def get_news_full(html, newsid):
-#     full= html.select("#{} > article > div > div > div > div > div > div >div.caas-body".format(newsid))
-#     body=[]
-#     for line in full[0].contents:
-#         if line.attrs == {}:
-#             try:
-#                 line = str(line).split('<p>')[1].split('</p>')[0]
-#                 if 'Most Read from' in line : continue #skip ads
-#                 else : body.append(line)
-#             except Exception as e:
-#                 # print("error :" ,e)
-#                 continue
-#     return body
-
-def get_news_full(url):
-    article = Article(url, language='en')
-    article.download()
-    article.parse()
-    return article.text
 
 
 def main():
@@ -121,10 +148,33 @@ def main():
         src2 = "https://finance.yahoo.com/news/"
         output = industry+".html"
         final = industry+'_news.json'
-        get_html(src1, html_path+output)
+        
+        get_html (src1, html_path+output)
         urlset = get_url(html_path+output, src2)
         print('Starts getting articles for ', industry)
-        get_news(urlset, output_path+final)
+        total_news = get_news(urlset)
+        save_json(total_news, output_path+final)
+
+    # industry = 'ms_healthcare'
+    
+    # # set path for html and json output
+    # html_path = '/Users/yikyungkim/Library/CloudStorage/GoogleDrive-k2y1513@gmail.com/My Drive/0_SNU GSDS/23_Spring/Project/Code/ARA/crawling/sector_html/'
+    # output_path = '/Users/yikyungkim/Library/CloudStorage/GoogleDrive-k2y1513@gmail.com/My Drive/0_SNU GSDS/23_Spring/Project/Code/ARA/crawling/sector_articles/'
+    
+    # src1 = "https://finance.yahoo.com/screener/predefined/"+industry+"/"
+    # src2 = "https://finance.yahoo.com/news/"
+    # output = industry+".html"
+    # final = industry+'_news.json'
+
+    # get_html(src1, html_path+output)
+    # urlset = get_url(html_path+output, src2)
+    # print('Starts getting articles for ', industry)
+    # total_news = get_news(urlset)
+    # save_json(total_news, output_path+final)
+
+
+
+
 
 if __name__ == '__main__':
     main()
