@@ -94,4 +94,5 @@ input.underline {
     border-top-width:0;
     border-bottom-width:1;
     background-color: beige;
+    margin-top: 10px;
 }

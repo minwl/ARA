@@ -85,15 +85,14 @@ function getRate()
 {
   const rates = document.getElementsByName('rating')
   const key = document.getElementById('key').innerText
-  console.log('why?')
-  console.log(key);
   const url_rate = `/feedback/${key}/`;
     for (i = 0; i < rates.length; i++) {
         if (rates[i].checked){
             console.log(rates[i].value);
-      fetch(url_rate+rates[i].value);
-      return rates[i].value;
-        }}
+            fetch(url_rate+rates[i].value);
+            return rates[i].value;
+        }
+      }
   return -1;
     }
 
@@ -110,6 +109,9 @@ function cont(){
     alert('please rate the answer before continue')
     return false;
   }
+  
+  //여기서 rate값에 따라 new answer 줄지 말지 결정 가능
+
   else{
 
   prevdone.disabled=true;
@@ -130,10 +132,12 @@ function done(){
     alert('please rate the answer before close')
     return false;
   }
+  
   else{
 
-  prevdone.disabled=true;
-  prevcont.disabled=true;}
+  // prevdone.disabled=true;
+  // prevcont.disabled=true;
+}
 
 }
 

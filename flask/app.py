@@ -101,9 +101,12 @@ def insertOne(newid, newpwd, newFirst, newLast, newEmail):
         'Name' : {'First' : newFirst, 'Last' : newLast},
         'newEmail': newEmail
     }
-    
-    query = user_db.insert_one(queryObject)
-    return None
+    val = user_db.find_one({"ID" :newid})
+    if val:
+       return dict(success=0)
+    else:
+        query = user_db.insert_one(queryObject)
+        return dict(success=1)
 
 @app.route('/valid/<id>/<pwd>', methods=['GET'])
 def validate(id, pwd):
@@ -111,7 +114,9 @@ def validate(id, pwd):
     if query:
         if query['PWD'] == pwd:
             return dict(success=1, username = query['Name']['First'])
-    else: return dict(success=0, username = None)
+        else:
+           return dict(success=0, username = 1)
+    else: return dict(success=0, username = 0)
 
 
 
