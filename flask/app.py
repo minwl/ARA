@@ -85,7 +85,6 @@ def ask(query):
    key = str(p.inserted_id)
    
    return dict(success=1, result=[question, answer, key])
-
 #db에 key 찾아서 rate항목 update
 @app.route('/feedback/<key>/<rate>', methods=['GET'])
 def feedback(key, rate):

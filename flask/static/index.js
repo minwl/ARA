@@ -1,16 +1,16 @@
 function clicked(){
-  console.log('submit button clicked')
   const container = document.getElementById("container");
   const currentInput = container.lastElementChild;
   const prevsubmit = currentInput.querySelector("#submit_btn");
   const previnput = currentInput.querySelector("#queryinput");
   const prevquery = previnput.value.trim();
+  const queue = prevquery.split(';', 2);
 
   console.log(`submitted query : ${prevquery}`)
-  if (prevquery === "") {
+  if (queue.length != 2) {
+    alert('please enter valid query.')
     return false
   }
-
   previnput.disabled = true;
   prevsubmit.disabled = true;
 
@@ -20,7 +20,6 @@ function clicked(){
 function getAnswer(query){
   const url = '/ask/'+query;
   $.getJSON(url, data => {
-    console.log(data.result[1]);
     addAnswer(data.result[1], data.result[2]);
   })
 }
