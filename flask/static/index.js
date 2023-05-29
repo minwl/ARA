@@ -142,23 +142,23 @@ function done(){
 
 
 
-function init() {
-console.log('page is ready');
-const savedUsername = sessionStorage.getItem("username");
-if (savedUsername === null){
+// function init() {
+// // console.log('page is ready');
+// // const savedUsername = sessionStorage.getItem("username");
+// // if (savedUsername === null){
 
-}
-else {
-  const greet = document.getElementById("greet")
-  const greetText = `<h1> Welcome, ${savedUsername} </h1>`;
-  greet.innerHTML = greetText;
-  const welcome = document.getElementById('welcomeContainer')
-  const loginform = document.getElementById("loginContainer")
-  loginform.classList.add('hidden')
-  welcome.classList.remove('hidden')
-  localStorage.setItem('username', username);
-}
-}
+// // }
+// // else {
+// //   const greet = document.getElementById("greet")
+// //   const greetText = `<h1> Welcome, ${savedUsername} </h1>`;
+// //   greet.innerHTML = greetText;
+// //   const welcome = document.getElementById('welcomeContainer')
+// //   const loginform = document.getElementById("loginContainer")
+// //   loginform.classList.add('hidden')
+// //   welcome.classList.remove('hidden')
+// //   localStorage.setItem('username', username);
+// // }
+// }
 
 
-window.addEventListener("load", init);
+// window.addEventListener("load", init);
