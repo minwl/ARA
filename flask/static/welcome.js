@@ -52,7 +52,7 @@ function registerNew(){
   $.getJSON(url_new, data => {
       if (data.success)
       {console.log('register success');
-      window.reload();
+      location.reload();
   }
       else{alert('ID already exist')}
   })
