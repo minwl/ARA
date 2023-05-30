@@ -1,17 +1,18 @@
 body{
   background-color: beige;
+  font-family:system-ui;
 }
 .bd-main {
     margin-top: 5px; margin-left: 10px;
   }
   .bd-intro {
-    background-color:rgb(159, 230, 189); font-weight : bold;color: white;
+    background-color:rgb(87, 176, 124); font-weight : bold;color: white;
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
     margin-top: 5px; 
   }
   .bd-answer {
-    background-color:rgb(159, 230, 189); font-weight : bold;color: white;
+    background-color:rgb(87, 176, 124);  font-weight : bold;color: white;
     border-radius: 10px;
     box-shadow: 5px 5px 5px grey;
     margin-top: 5px; 
@@ -95,4 +96,14 @@ input.underline {
     border-bottom-width:1;
     background-color: beige;
     margin-top: 10px;
+}
+
+#title{
+  color: white;
+  text-shadow: 2px 2px 3px grey;
+}
+
+#list{
+  list-style-image: url('icon.png');
+  text-align: left;
 }
