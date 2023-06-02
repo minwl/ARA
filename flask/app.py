@@ -1,8 +1,9 @@
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 import pymongo
 
-db_url = 'mongodb://acc0:yNof9Ynp06JlBUUHTAJ4tkXF5AotOndftrTnlZDSvoM4ugAMSdiY9myIWiz3yZbdzPfgNGtiNg6dACDbRyoj9A==@acc0.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@acc0@'
-DB_NAME = 'testDB'
+# db_url = 'mongodb://acc0:yNof9Ynp06JlBUUHTAJ4tkXF5AotOndftrTnlZDSvoM4ugAMSdiY9myIWiz3yZbdzPfgNGtiNg6dACDbRyoj9A==@acc0.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@acc0@'
+db_url = "mongodb://ara-prod:LDBvT8AQvOdptEbDX2GU8sAL5ogUzDqpdvCHPQJgfSMmfLPqhWoLTXvuY8DTE0PPMuCLwOMgyGczACDbUJztYw==@ara-prod.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@ara-prod@"
+DB_NAME = 'ARA_DB'
 USER_COLLECTION = 'USER_INFO'
 FEEDBACK_COLLECTION = 'FEEDBACK'
 
@@ -85,6 +86,7 @@ def ask(query):
    key = str(p.inserted_id)
    
    return dict(success=1, result=[question, answer, key])
+  
 #db에 key 찾아서 rate항목 update
 @app.route('/feedback/<key>/<rate>', methods=['GET'])
 def feedback(key, rate):
