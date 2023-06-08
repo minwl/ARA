@@ -5,18 +5,6 @@ body{
 .bd-main {
     margin-top: 5px; margin-left: 10px;
   }
-  .bd-intro {
-    background-color:rgb(87, 176, 124); font-weight : bold;color: white;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px grey;
-    margin-top: 5px; 
-  }
-  .bd-answer {
-    background-color:rgb(87, 176, 124);  font-weight : bold;color: white;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px grey;
-    margin-top: 5px; 
-  }
   .bd-input {
     background-color: aliceblue; padding : 10px;
     border-radius: 10px;
@@ -108,4 +96,21 @@ input.underline {
   text-align: left;
   font-size: larger;
   color : gray;
+}
+
+.answer{
+  font-weight: bold;
+}
+
+.new_div{
+  background-color: #ffe355;
+  margin : 1%;
+  padding: 3%;
+  text-align: left;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px grey;
+}
+
+.loading{
+  text-align: center;
 }

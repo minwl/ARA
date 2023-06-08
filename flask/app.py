@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
+import requests
 import pymongo
 
 # db_url = 'mongodb://acc0:yNof9Ynp06JlBUUHTAJ4tkXF5AotOndftrTnlZDSvoM4ugAMSdiY9myIWiz3yZbdzPfgNGtiNg6dACDbRyoj9A==@acc0.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@acc0@'
@@ -11,6 +12,8 @@ app = Flask(__name__)
 
 client = pymongo.MongoClient(db_url)
 db = client[DB_NAME]
+
+sectors = ['MS_BASIC_MATERIALS', 'MS_COMMUNICATION_SERVICES', 'MS_CONSUMER_CYCLICAL', 'MS_CONSUMER_DEFENSIVE','MS_ENERGY','MS_FINANCIAL_SERVICES','MS_HEALTHCARE','MS_INDUSTRIALS','MS_REAL_ESTATE', 'MS_TECHNOLOGY','MS_UTILITIES']
 
 if DB_NAME not in client.list_database_names():
     # Create a database with 400 RU throughput that can be shared across
@@ -59,39 +62,57 @@ def index():
 
 @app.route('/price')
 def price():
-   print('Request for price page received')
-   return render_template('price.html')
+    print('Request for price page received')
+    return render_template('price.html')
 
+@app.route('/latest')
+def latest():
+    latest_json=[]
+    for sector in sectors:
+       sector_db = db[sector]
+       cursor = sector_db.find().sort("_id", -1).limit(3)
+       latest=list(cursor)
+       titles = []
+       for i in range(len(latest)):
+           news = latest[i]
+           titles.append(news['title'])
 
-@app.route('/ask/<query>', methods=['GET']) #여기서 sector query answer -> db로 저장, key_id값 받아서 html에 숨겨놓기
-def ask(query):
-  if query:
-   sector = query.split(';')[0]
-   question = query.split(';')[1]
+       sector_json = {
+           'sector' : sector,
+           'titles' : titles
+       }
+       latest_json.append(sector_json)
+    return dict(success = 1, result = latest_json)
 
-   #connect to model output
-#    url = "https://907a-35-223-201-67.ngrok-free.app/QA"  
-#    response = requests.get(url, {'input_text': question})
-#    answer = response.text
+@app.route('/ask/<sector>/<query>', methods=['GET']) #여기서 sector query answer -> db로 저장, key_id값 받아서 html에 숨겨놓기
+def ask(sector, query):
+    if query:
+        #    sector = query.split(';')[0]
+        #    question = query.split(';')[1]
 
-    #sample answer for test
-   answer = 'this is sample answer'
-   feedback = {
-     'sector' : sector,
-     'query' : query,
-     'answer' : answer,
-     'rate' : None
-  }
-   p = feedback_db.insert_one(feedback)
-   key = str(p.inserted_id)
-   
-   return dict(success=1, result=[question, answer, key])
+        #    connect to model output
+        url = "https://ebf2-35-196-222-12.ngrok-free.app/QA"
+        response = requests.get(url, {'input_text': query})
+        answer = response.text
+
+            #sample answer for test
+        answer = 'this is sample answer'
+        feedback = {
+            'sector' : sector,
+            'query' : query,
+            'answer' : answer,
+            'rate' : None
+        }
+        p = feedback_db.insert_one(feedback)
+        key = str(p.inserted_id)
+        
+    return dict(success=1, result=[query, answer, key])
   
 #db에 key 찾아서 rate항목 update
 @app.route('/feedback/<key>/<rate>', methods=['GET'])
 def feedback(key, rate):
-  feedback_db.update_one({'_id': key}, {"$set": {'rate' : rate}})
-  return dict(success=1, result=rate)
+   feedback_db.update_one({'_id': key}, {"$set": {'rate' : rate}})
+   return dict(success=1, result=rate)
 
 
 @app.route('/register/<newid>/<newpwd>/<newFirst>/<newLast>/<newEmail>', methods=['GET'])

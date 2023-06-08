@@ -23,24 +23,25 @@
                     <input id = 'pwd' type = 'password' class="underline" placeholder="Password">
                 </div>
                 <div class = 'col-md'>
-                    <a id = 'login_btn' class = 'btn btn-outline-dark pad' onclick="login()">Log in</a>
                     <a id = 'register_btn' class = 'btn btn-outline-dark pad' onclick = 'registerShow()'>Register</a>
+                    <a id = 'login_btn' class = 'btn btn-outline-dark pad' onclick="login()">Log in</a>
+
                 </div>
             </div>
 
 
         <div id = 'welcomeContainer' class = 'row w-50 hidden'>
             <div class = 'col-md-4'>
-                <a class = 'btn btn-outline-dark pad' href="{{url_for('index')}}"> Get Started </a>
-            </div>
-            <div class = 'col-md-4'>
-
                 <a class = 'btn btn-outline-dark pad' href = "{{url_for('howto')}}"> How to use</a>
-
             </div>
             <div class = 'col-md-4'>
-                <a class = 'btn btn-outline-dark pad' href ="{{url_for('price')}}">Price</a>
+                <a class = 'btn btn-outline-dark pad' href ="{{url_for('price')}}">Latest News</a>
             </div>
+            <div class = 'col-md-4'>
+                <a class = 'btn btn-outline-dark pad' href="{{url_for('index')}}"> Get Started</a>
+            </div>
+
+
         </div>
 
 
