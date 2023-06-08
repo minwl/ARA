@@ -111,6 +111,6 @@ input.underline {
   box-shadow: 5px 5px 5px grey;
 }
 
-.loading{
+#loading{
   text-align: center;
 }
