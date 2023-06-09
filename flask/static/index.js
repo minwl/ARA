@@ -2,7 +2,7 @@
 
 function clicked(){
   // spinner on
-const loadElem = loading();
+loading();
 
 const container = document.getElementById("container");
 const currentInput = container.lastElementChild;
@@ -40,7 +40,7 @@ addFeedback(answerElem, key);
 
 // delete spinner
 const spinner = document.getElementById("loading");
-spinner.classList.add('d-none');
+spinner.remove();
 
 bdinput.appendChild(answerElem);
 
