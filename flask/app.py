@@ -91,12 +91,13 @@ def ask(sector, query):
         #    question = query.split(';')[1]
 
         #    connect to model output
-        url = "https://ebf2-35-196-222-12.ngrok-free.app/QA"
-        response = requests.get(url, {'input_text': query})
+        url = "https://9b31-34-125-219-160.ngrok-free.app/QA"
+        
+        response = requests.get(url, {'input_text': sector + ';'+query})
         answer = response.text
 
             #sample answer for test
-        answer = 'this is sample answer'
+        # answer = 'this is sample answer'
         feedback = {
             'sector' : sector,
             'query' : query,

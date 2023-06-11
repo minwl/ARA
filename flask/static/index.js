@@ -201,7 +201,7 @@ load.setAttribute('id', 'loading');
 load.innerHTML =  `
           <strong> Finding answers...  </strong>
           <div class="spinner-border" role="status" aria-hidden="true"></div> <br>
-          <strong>today's quote : ${todaysQuote}</strong>`;
+          <strong>Today's Quote : ${todaysQuote}</strong>`;
 
 // return load;
 
