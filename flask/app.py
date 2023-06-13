@@ -84,20 +84,16 @@ def latest():
        latest_json.append(sector_json)
     return dict(success = 1, result = latest_json)
 
-@app.route('/ask/<sector>/<query>', methods=['GET']) #여기서 sector query answer -> db로 저장, key_id값 받아서 html에 숨겨놓기
+@app.route('/ask/<sector>/<query>', methods=['GET']) #sector query answer -> db, db -> key_id -> html
 def ask(sector, query):
     if query:
-        #    sector = query.split(';')[0]
-        #    question = query.split(';')[1]
 
         #    connect to model output
-        url = "https://9b31-34-125-219-160.ngrok-free.app/QA"
+        url = " https://785e-34-124-147-0.ngrok-free.app/QA"
         
         response = requests.get(url, {'input_text': sector + ';'+query})
         answer = response.text
 
-            #sample answer for test
-        # answer = 'this is sample answer'
         feedback = {
             'sector' : sector,
             'query' : query,
